@@ -9,7 +9,6 @@ const router = Router();
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "../utils/swagger/swagger.json";
 
-// documentation =========================================================================================================================================
 router.use("/docs", swaggerUi.serve);
 router.get("/docs", swaggerUi.setup(swaggerDocument));
 
