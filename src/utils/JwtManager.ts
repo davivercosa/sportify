@@ -25,4 +25,34 @@ export class JwtManager {
       return { status: "error", message: error, code: 500 };
     }
   }
+
+  authenticate(token: string): iApiResponse {
+    try {
+      jwt.verify(token, secret);
+
+      const decodedToken = jwt.decode(token);
+
+      return {
+        status: "success",
+        message: "User successfully authenticated!",
+        result: decodedToken,
+      };
+    } catch (error) {
+      if (error instanceof JsonWebTokenError) {
+        if (error.name === "JsonWebTokenError") {
+          return {
+            status: "error",
+            message: "User unauthorized!",
+            code: 401,
+          };
+        }
+
+        if (error.name === "TokenExpiredError") {
+          return { status: "error", message: "Token expired!", code: 401 };
+        }
+      }
+
+      return { status: "error", message: error, code: 500 };
+    }
+  }
 }
