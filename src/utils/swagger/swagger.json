@@ -1,0 +1,126 @@
+{
+  "openapi": "3.0.0",
+
+  "info": {
+    "title": "Sportify API",
+    "description": "Backend feito para o portal e para o app",
+    "version": "1.0.0"
+  },
+
+  "servers": [
+    {
+      "url": "http://192.168.206.16:3000/api/v1/",
+      "description": "Development Server"
+    }
+  ],
+
+  "tags": [
+    {
+      "name": "Account",
+      "description": "Criação de usuário, criação e autenticação do token, envio de email (esquecer senha), resetar senha"
+    }
+  ],
+
+  "paths": {
+    "/account": {
+      "post": {
+        "tags": ["Account"],
+        "summary": "Create a new account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAccountRequest"
+              },
+              "examples": {
+                "signupExample": {
+                  "value": {
+                    "first_name": "Tiringa",
+                    "last_name": "Júnior",
+                    "birthday": "0000-00-00",
+                    "email": "tiringa@gmail.com",
+                    "password": "senha",
+                    "phone": "85999999999",
+                    "document": "00000000000"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateAccountResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Account already registered on our database!"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "CreateAccountRequest": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "date"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "document": {
+            "type": "string"
+          }
+        }
+      },
+
+      "CreateAccountResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Account successfully created!"
+          }
+        }
+      }
+    },
+
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
