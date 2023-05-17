@@ -3,7 +3,7 @@ export interface iCreateAccount {
 
   last_name: string;
 
-  birthday: Date;
+  birthday: string;
 
   email: string;
 

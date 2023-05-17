@@ -11,8 +11,8 @@ export class Account {
   @Column("varchar", { length: 20 })
   last_name: string;
 
-  @Column({ type: "date" })
-  birthday: Date;
+  @Column("varchar", { length: 10 })
+  birthday: string;
 
   @Column("varchar", { length: 50, unique: true })
   email: string;

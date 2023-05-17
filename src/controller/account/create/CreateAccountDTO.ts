@@ -5,7 +5,10 @@ const createAccountSchema = Joi.object({
 
   last_name: Joi.string().strip().max(20).required(),
 
-  birthday: Joi.date().required(),
+  birthday: Joi.string()
+    .strip()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .required(),
 
   email: Joi.string()
     .strip()
