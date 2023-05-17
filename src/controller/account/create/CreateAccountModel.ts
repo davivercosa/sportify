@@ -18,11 +18,14 @@ export class CreateAccountModel {
     document,
   }: iCreateAccount): Promise<iApiResponse> {
     try {
-      const accountExist = await this.accountRepository.findOneBy({
-        email,
-      });
+      const accountExist = await this.accountRepository
+        .createQueryBuilder("account")
+        .where("account.email = :email", { email })
+        .orWhere("account.phone = :phone", { phone })
+        .orWhere("account.document = :document", { document })
+        .getExists();
 
-      if (accountExist !== null) {
+      if (accountExist) {
         return {
           status: "error",
           message: "Account already registered on our database!",
