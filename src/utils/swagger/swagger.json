@@ -3,7 +3,7 @@
 
   "info": {
     "title": "Sportify API",
-    "description": "Backend feito para o portal e para o app",
+    "description": "Backend developed for the sportify e-commerce",
     "version": "1.0.0"
   },
 
@@ -17,7 +17,7 @@
   "tags": [
     {
       "name": "Account",
-      "description": "Criação de usuário, criação e autenticação do token, envio de email (esquecer senha), resetar senha"
+      "description": "Account creation | Token creation"
     }
   ],
 
@@ -34,7 +34,7 @@
                 "$ref": "#/components/schemas/CreateAccountRequest"
               },
               "examples": {
-                "signupExample": {
+                "accountExample": {
                   "value": {
                     "first_name": "Tiringa",
                     "last_name": "Júnior",
@@ -55,13 +55,100 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateAccountResponse"
+                  "$ref": "#/components/schemas/CreateAccountResponse200"
                 }
               }
             }
           },
           "400": {
-            "description": "Account already registered on our database!"
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DTOErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateAccountResponse409"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/account/login": {
+      "post": {
+        "tags": ["Account"],
+        "summary": "Create a new token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginAccountRequest"
+              },
+              "examples": {
+                "accountLoginExample": {
+                  "value": {
+                    "email": "tiringa@gmail.com",
+                    "password": "senha"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginAccountResponse200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DTOErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginAccountResponse401"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginAccountResponse404"
+                }
+              }
+            }
           },
           "500": {
             "description": "Internal server error"
@@ -99,8 +186,7 @@
           }
         }
       },
-
-      "CreateAccountResponse": {
+      "CreateAccountResponse200": {
         "type": "object",
         "properties": {
           "status": {
@@ -110,6 +196,147 @@
           "message": {
             "type": "string",
             "example": "Account successfully created!"
+          }
+        }
+      },
+      "CreateAccountResponse409": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "error"
+          },
+          "message": {
+            "type": "string",
+            "example": "Account already registered on our database!"
+          }
+        }
+      },
+
+      "LoginAccountRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginAccountResponse200": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Welcome back, Tiringa!"
+          },
+          "result": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNjg0MzMwNjg2LCJleHAiOjE2ODQ0MTcwODZ9.IzlqjBKtRL87sC56JtSww5hJfrAmoU7fGqc7Vt2tovg"
+          }
+        }
+      },
+      "LoginAccountResponse400": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "object",
+            "properties": {
+              "_original": {
+                "type": "object",
+                "example": { "email": "davivercosasoares@gmaill.com" }
+              },
+              "details": {
+                "type": "array",
+                "example": [
+                  {
+                    "message": "\"password\" is required",
+                    "path": ["password"],
+                    "type": "any.required",
+                    "context": {
+                      "label": "password",
+                      "key": "password"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "LoginAccountResponse401": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "error"
+          },
+          "message": {
+            "type": "string",
+            "example": "Something is wrong with the account info provided!"
+          }
+        }
+      },
+      "LoginAccountResponse404": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "error"
+          },
+          "message": {
+            "type": "string",
+            "example": "Account not found on our database!"
+          }
+        }
+      },
+
+      "DTOErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "error"
+          },
+          "message": {
+            "type": "object",
+            "properties": {
+              "_original": {
+                "type": "object"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "context": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

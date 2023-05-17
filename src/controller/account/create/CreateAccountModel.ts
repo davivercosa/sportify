@@ -29,7 +29,7 @@ export class CreateAccountModel {
         return {
           status: "error",
           message: "Account already registered on our database!",
-          code: 400,
+          code: 409,
         };
       }
 
