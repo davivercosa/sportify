@@ -11,7 +11,11 @@ AppDataSource.initialize()
 
     app.use(bodyParser.json());
     app.use("/api/v1", router);
-    app.use(cors());
+    app.use(
+      cors({
+        origin: "*",
+      })
+    );
 
     app.listen(3000);
   })
